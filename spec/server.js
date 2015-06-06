@@ -15,11 +15,11 @@ function createTestServer(options) {
         pass = options.pass || "ilovealice",
         port = options.port || 3000;
 
-    var testUserId    = 12345;
-    var testNewUserId = 67890;
-    var testMailingId = 30003;
-    var testAssetId   = 40001;
-    var testOrderId   = 50001;
+    var testUserId    = options.testUserId    || 12345;
+    var testNewUserId = options.testNewUserId || 67890;
+    var testMailingId = options.testMailingId || 30003;
+    var testAssetId   = options.testAssetId   || 40001;
+    var testOrderId   = options.testOrderId   || 50001;
 
 
     // create a local Express App
@@ -138,14 +138,12 @@ function createTestServer(options) {
         form.on('part', function(part) {
             // filename is "null" when this is a field and not a file
             if (!part.filename) {
-                console.log('got field named ' + part.name);
                 if (part.name === 'title') {
                     hasTitleField = true;
                 }
             }
 
             if (part.filename && part.name) {
-                console.log('got file named ' + part.name + ', filename '+part.filename);
                 if (part.name === 'asset') {
                     hasAssetField = true;
                 }
@@ -171,8 +169,9 @@ function createTestServer(options) {
         var body = req.body;
 
         if (!body || !body.recipientFields || !body.recipients
-            || body.recipients.length > 0
-            || body.recipients[0].length !== body.recipientFields.length) {
+            || body.recipients.length <= 0
+            || body.recipients[0].length !== body.recipientFields.length
+        ) {
 
             return res.status(400)
                 .send('Bad Request, missing or bad JSON PUT `recipients` and `recipientFields` parameters')
@@ -185,12 +184,9 @@ function createTestServer(options) {
     });
 
     var handleSVGPage = function (req, res) {
-        console.log('Hello SVG');
         if (req.get('Content-Type') !== 'image/svg+xml') {
             return res.status(400).end('Bad Content-Type');
         }
-
-        console.log(req.body.toString());
 
         if (!req.body.toString().indexOf('<svg')) {
             return res.status(400).end('No SVG data found');

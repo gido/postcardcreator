@@ -22,10 +22,10 @@ describe('Postcard Creator API Auth', function () {
     });
 
     // Start server
-    var serverPort = 3000;
+    var serverPort = 3001;
     var server = http.createServer(app).listen(serverPort);
 
-    var testHost = 'localhost:3000';
+    var testHost = 'localhost:3001';
 
     it('should send correct HTTP Auth for each request', function (done) {
         var client = new postcardcreator.Client('bob@example.org', 'ilovealice', {'host': testHost, 'useSSL': false });
