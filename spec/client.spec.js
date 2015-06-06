@@ -2,31 +2,29 @@ var postcardcreator = require('../index.js');
 
 describe('Client', function() {
 
-    it('should build the correct baseUrl', function(done) {
-        var user = 'bob',
-            pass = 'bobpass',
-            testHost = 'google.com',
-            apiVersion = '1.0';
-        var client = new postcardcreator.Client(user, pass, {
-            'host': testHost
+    it('should build the correct baseUrl', function() {
+        var client = new postcardcreator.Client('bob', 'bobpass', {
+            'host': 'google.com'
         });
 
-        expect(client.getBaseUrl()).toBe('https://'+user+':'+pass+'@'+testHost+'/rest/'+apiVersion);
-        done();
+        expect(client.getBaseUrl()).toBe('https://bob:bobpass@google.com/rest/1.0');
     });
 
-    it('should build the correct baseUrl without SSL', function(done) {
-        var user = 'bob',
-            pass = 'bobpass',
-            testHost = 'google.com',
-            apiVersion = '1.0';
-        var client = new postcardcreator.Client(user, pass, {
-            'host': testHost,
+    it('should build the correct baseUrl without SSL', function() {
+        var client = new postcardcreator.Client('bob', 'bobpass', {
+            'host': 'google.com',
             'useSSL': false,
         });
 
-        expect(client.getBaseUrl()).toBe('http://'+user+':'+pass+'@'+testHost+'/rest/'+apiVersion);
-        done();
+        expect(client.getBaseUrl()).toBe('http://bob:bobpass@google.com/rest/1.0');
+    });
+
+    it('should build the correct baseUrl without user/pass', function() {
+        var client = new postcardcreator.Client(null, null, {
+            host: 'www.yahoo.com'
+        });
+
+        expect(client.getBaseUrl()).toBe('https://www.yahoo.com/rest/1.0');
     });
 
 });

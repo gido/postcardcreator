@@ -2,11 +2,13 @@ var postcardcreator = require('../index.js');
 var stream = require('stream');
 
 describe('Users', function() {
-    var clientOptions = {};
     var client = new postcardcreator.Client('bob@example.org', 'ilovealice');
+
+    var unauthenticatedClient = new postcardcreator.Client();
 
     beforeEach(function() {
         spyOn(client, 'request');
+        spyOn(unauthenticatedClient, 'request')
     });
 
     it('get the current user', function() {
@@ -45,9 +47,9 @@ describe('Users', function() {
             country: "CHE"
         };
 
-        client.users.create(user);
+        unauthenticatedClient.users.create(user);
 
-        expect(client.request).toHaveBeenCalledWith({
+        expect(unauthenticatedClient.request).toHaveBeenCalledWith({
             url: '/users',
             method: 'POST',
             body: user,
