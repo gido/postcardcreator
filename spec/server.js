@@ -136,9 +136,12 @@ function createTestServer(options) {
 
         var body = req.body;
 
-        if (!body || !body.recipientFields || !body.recipients || body.recipientFields.length !== body.recipientFields.length) {
+        if (!body || !body.recipientFields || !body.recipients
+            || body.recipients.length > 0
+            || body.recipients[0].length !== body.recipientFields.length) {
+
             return res.status(400)
-                .send('Bad Request, missing JSON PUT `recipients` or `recipientFields` parameters')
+                .send('Bad Request, missing or bad JSON PUT `recipients` and `recipientFields` parameters')
                 .end();
 
         }
