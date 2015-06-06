@@ -16,6 +16,7 @@ function createTestServer(options) {
         port = options.port || 3000;
 
     var testUserId    = 12345;
+    var testNewUserId = 67890;
     var testMailingId = 30003;
     var testAssetId   = 40001;
     var testOrderId   = 50001;
@@ -61,6 +62,39 @@ function createTestServer(options) {
         };
 
         res.json(data);
+    });
+
+    app.post('/rest/1.0/users', function(req, res) {
+        var userUrl = req.protocol + '://' + req.get('host') + '/rest/1.0/users/' + testNewUserId;
+
+        var requiredKeys = [
+            "tenantId",
+            "email",
+            "password",
+            "company",
+            "sex",
+            "givenName",
+            "familyName",
+            "language",
+            "newsletterSubscribed",
+            "gtcAccepted",
+            "address",
+            "postCode",
+            "place",
+            "country"
+        ];
+
+        var data = req.body;
+
+        for (var requiredKey in requiredKeys) {
+            if (!data.hasOwnProperty(requiredKey)) {
+                res.status(400).end('Error, missing value '+requiredKey);
+                return;
+            }
+        }
+
+        res.status(201).location(userUrl).end();
+
     });
 
     app.get('/rest/1.0/users/:user_id/quota', function(req, res) {

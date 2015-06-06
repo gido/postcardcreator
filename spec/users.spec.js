@@ -27,6 +27,35 @@ describe('Users', function() {
         }, undefined);
     });
 
+    it('create a new user', function() {
+        var user = {
+            tenantId: "CHE",
+            email: 'charles@example.org',
+            password: 'passw0rd',
+            company: null,
+            sex: 'MALE',
+            givenName: 'Charles',
+            familyName: 'Dickens',
+            language: 'en',
+            newsletterSubscribed: false,
+            gtcAccepted: true,
+            address: "Rue du Roman 7",
+            postCode: "1000",
+            place: "Lausanne",
+            country: "CHE"
+        };
+
+        client.users.create(user);
+
+        expect(client.request).toHaveBeenCalledWith({
+            url: '/users',
+            method: 'POST',
+            body: user,
+            json: true
+        }, undefined);
+    });
+
+
     it('create the mailings', function() {
         var callback = function () {};
         client.users.mailings.create(12345, callback);
