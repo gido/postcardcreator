@@ -1,4 +1,5 @@
 var postcardcreator = require('../index.js');
+var Postcard = require('../lib/Postcard');
 var TestServer = require('./server');
 var fs = require('fs');
 var path = require('path');
@@ -37,7 +38,9 @@ describe('Send a Postcard with the Test Server', function() {
         };
         var message = 'This is a test';
 
-        client.sendPostcard(asset, recipient, message, {}, function(err, result) {
+        var postcard = new Postcard(asset, message, recipient);
+
+        client.sendPostcard(postcard, function(err, result) {
             expect(err).toEqual(null);
 
             expect(result.user.userId).toBe(12345);

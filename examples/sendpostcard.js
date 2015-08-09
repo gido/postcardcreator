@@ -1,4 +1,5 @@
-var postcard = new require('../lib'),
+var postcardcreator = require('../lib'),
+    Postcard = postcardcreator.Postcard,
     fs = require('fs'),
     path = require('path'),
 
@@ -16,7 +17,7 @@ if (process.env.TEST) {
     };
 }
 
-var client = new postcard.Client(postcard_user, postcard_pass, options);
+var client = new postcardcreator.Client(postcard_user, postcard_pass, options);
 
 console.log("Created a client with credentials "+postcard_user);
 
@@ -63,7 +64,9 @@ var recipient = {
     place: "Lausanne"
 };
 
-client.sendPostcard(assetStream, recipient, message, {}, function(err, result) {
+var postcard = new Postcard(assetStream, message, recipient);
+
+client.sendPostcard(postcard, function(err, result) {
     if (!err) {
         console.log("Postcard sent with success !");
     } else {

@@ -147,10 +147,10 @@
     <!-- 10pt * 1.2 => mm => 4.2234mm -->
 
     <text id="recipient" class="pp" transform="matrix(1 0 0 1 73 52)">
-      <tspan x="0" dy="3.5278"><%= givenName %> <%= familyName %></tspan>
-      <tspan x="0" dy="4.2234"><%= company %></tspan>
-      <tspan x="0" dy="4.2234"><%= street %></tspan>
-      <tspan x="0" dy="4.2234"><%= postCode %> <%= place %></tspan>
+      <tspan x="0" dy="3.5278"><%= recipient.givenName %> <%= recipient.familyName %></tspan>
+      <tspan x="0" dy="4.2234"><%= recipient.company %></tspan>
+      <tspan x="0" dy="4.2234"><%= recipient.street %></tspan>
+      <tspan x="0" dy="4.2234"><%= recipient.postCode %> <%= recipient.place %></tspan>
     </text>
     <g id="recipient-lines" class="no-pp webstamp" transform="matrix(1 0 0 1 73 52)" visibility="hidden" style="stroke:black; stroke-width:0.1; stroke-dasharray:0.4">
       <line x1="0" y1="9" x2="60" y2="9"/>
