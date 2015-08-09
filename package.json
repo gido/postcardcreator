@@ -1,6 +1,6 @@
 {
   "name": "postcardcreator",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Swiss Postcard Creator API",
   "main": "index.js",
   "scripts": {
@@ -8,7 +8,7 @@
   },
   "author": "Gilles Doge <gilles.doge@gmail.com>",
   "license": "MIT",
-    "dependencies": {
+  "dependencies": {
     "dateformat": "^1.0.11",
     "q": "^1.3.0",
     "request": "^2.55.0",
