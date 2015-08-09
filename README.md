@@ -5,13 +5,14 @@ A node.js API for the [Swiss Post Postcard Creator](http://postcardcreator.post.
 
 ```javascript
 var path = require('path'),
-    Postcardcreator = require('postcardcreator');
+    Postcardcreator = require('postcardcreator'),
+    Postcard = postcardcreator.Postcard;
 
 var client = new Postcardcreator(postcard_user, postcard_pass);
 
 var message = "Hello, here is a picture of me. Best!";
 var assetStream = fs.createReadStream(path.join(__dirname, 'me_under_the_sun.jpg'));
-// here is a real address you can use it to send me some picture ;-)
+// here is my real address you can use it to send me picture of your works ;-)
 var recipient = {
     salutation: "Monsieur",
     givenName: "Gilles",
@@ -22,13 +23,15 @@ var recipient = {
     place: "Lausanne"
 };
 
-client.sendPostcard(assetStream, recipient, message, function(err, result) {
+var postcard = new Postcard(assetStream, message, recipient);
+
+client.sendPostcard(postcard, function(err, result) {
     if (err) {
         console.log("Error when sending the postcard. ", err);
         handleError(err);
         return;
     }
-    
+
     console.log("Postcard sent with success !");
     console.log(result);
 });
