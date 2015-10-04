@@ -39,7 +39,7 @@
 
     <text id="senderField-company"><%= sender.company %></text>
     <text id="senderField-name"><%= sender.givenName %> <%= sender.familyName %></text>
-    <text id="senderField-address"><%= sender.address %></text>
+    <text id="senderField-address"><%= sender.street %></text>
     <text id="senderField-zipAndPlace"><%= sender.postCode %> <%= sender.place %></text>
     <text id="senderField-country"></text>
   </defs>
