@@ -6,7 +6,7 @@ A node.js API for the [Swiss Post Postcard Creator](http://postcardcreator.post.
 ```javascript
 var path = require('path'),
     Postcardcreator = require('postcardcreator'),
-    Postcard = postcardcreator.Postcard;
+    Postcard = Postcardcreator.Postcard;
 
 var client = new Postcardcreator(postcard_user, postcard_pass);
 
