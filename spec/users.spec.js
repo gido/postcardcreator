@@ -2,7 +2,7 @@ var postcardcreator = require('../index.js');
 var stream = require('stream');
 
 describe('Users', function() {
-    var client = new postcardcreator.Client('bob@example.org', 'ilovealice');
+    var client = new postcardcreator.Client('ABC123456');
 
     var unauthenticatedClient = new postcardcreator.Client();
 

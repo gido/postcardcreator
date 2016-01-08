@@ -17,7 +17,6 @@
   "devDependencies": {
     "body-parser": "^1.12.3",
     "express": "^4.12.3",
-    "http-auth": "^2.2.5",
     "jasmine-node": "^1.14.5",
     "multiparty": "^4.1.1"
   }

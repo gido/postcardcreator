@@ -8,8 +8,7 @@ describe('Send a Postcard with the Test Server', function() {
 
     // start the test server
     var server = new TestServer({
-        user: 'bob@example.org',
-        pass: 'ilovealice',
+        validAuthToken: 'ABC123456',
         host: 'localhost',
         port: 3002,
 
@@ -21,7 +20,7 @@ describe('Send a Postcard with the Test Server', function() {
     });
 
     it ('should send the postcard with success', function(done) {
-        var client = new postcardcreator('bob@example.org', 'ilovealice', {
+        var client = new postcardcreator('ABC123456', {
             host: 'localhost:3002',
             useSSL: false
         });

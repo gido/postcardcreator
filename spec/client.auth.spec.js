@@ -6,19 +6,30 @@ describe('Postcard Creator API Auth', function () {
     // create a local Express App
     var app = express();
 
+    var auth = function (req, res, next) {
+        var bearer = req.get('Authorization');
+        var token;
 
-    var auth = require('http-auth');
-    var basic = auth.basic({
-            realm: "Web."
-        }, function (username, password, callback) { // Custom authentication method.
-            callback(username === "bob@example.org" && password === "ilovealice");
+        if (bearer) {
+          token = bearer.replace('Bearer ', '');
         }
-    );
-    app.use(auth.connect(basic));
-    //app.use(express.urlencoded());
 
-    app.get('/rest/1.0/users/current', function(req, res) {
-        res.send('{ "email": "'+req.user+'" }');
+        if ('ABC123456' === token) {
+          next();
+        } else {
+          res.statusCode = 401;
+          res.statusText = 'Unauthorized';
+          res.json({
+            "error": "invalid_token",
+            "error_description": "Cannot convert access token to JSON"
+          }).send();
+        }
+    };
+
+    app.use(auth);
+
+    app.get('/rest/2.0/users/current', function(req, res) {
+        res.send('{ "email": "testvalue" }');
     });
 
     // Start server
@@ -28,7 +39,7 @@ describe('Postcard Creator API Auth', function () {
     var testHost = 'localhost:3001';
 
     it('should send correct HTTP Auth for each request', function (done) {
-        var client = new postcardcreator.Client('bob@example.org', 'ilovealice', {'host': testHost, 'useSSL': false });
+        var client = new postcardcreator.Client('ABC123456', {'host': testHost, 'useSSL': false });
         client.request({
             'url': '/users/current',
             'method': 'GET'
@@ -36,17 +47,12 @@ describe('Postcard Creator API Auth', function () {
             expect(data).toBeTruthy();
             expect(err).toBeFalsy();
 
-            //expect(data.nodeClientResponse).toBeDefined();
-            //expect(data.nodeClientResponse.statusCode).toBe(200);
-
-            expect(data.email).toBe('bob@example.org');
-
             done();
         });
     });
 
     it('should return 401 when wrong password is set', function(done) {
-        var client = new postcardcreator.Client('bob@example.org', 'wrongpass', {'host': testHost, 'useSSL': false});
+        var client = new postcardcreator.Client('wrongtoken', {'host': testHost, 'useSSL': false});
         client.request({
             'url': '/users/current',
             'method': 'GET'

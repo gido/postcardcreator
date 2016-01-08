@@ -1,5 +1,4 @@
 var express = require('express'),
-    auth = require('http-auth'),
     bodyParser = require('body-parser'),
     http = require('http'),
     util = require('util'),
@@ -10,9 +9,8 @@ var express = require('express'),
 function createTestServer(options) {
     options = options || {};
 
-    var user = options.user || "bob@example.org",
+    var validAuthToken = options.validAuthToken || "ABC123456",
         host = options.host || "localhost",
-        pass = options.pass || "ilovealice",
         port = options.port || 3000;
 
     var testUserId    = options.testUserId    || 12345;
@@ -24,20 +22,33 @@ function createTestServer(options) {
 
     // create a local Express App
     var app = express();
-    var basic = auth.basic({
-            realm: "Web."
-        }, function (username, password, callback) {
-            callback(username === user && password === pass);
-        }
-    );
+    var auth = function (req, res, next) {
+        var bearer = req.get('Authorization');
+        var token;
 
-    app.use(auth.connect(basic));
+        if (bearer) {
+          token = bearer.replace('Bearer ', '');
+        }
+
+        if (validAuthToken === token) {
+          next();
+        } else {
+          res.statusCode = 401;
+          res.statusText = 'Unauthorized';
+          res.json({
+            "error": "invalid_token",
+            "error_description": "Cannot convert access token to JSON"
+          }).send();
+        }
+    };
+
+    app.use(auth);
 
     app.use(bodyParser.json()); // for parsing application/json
     app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
     app.use(bodyParser.raw({ type: 'image/svg+xml' }));
 
-    app.get('/rest/1.0/users/current', function(req, res) {
+    app.get('/rest/2.0/users/current', function(req, res) {
         var data = {
             "tenantId": "CHE",
             "userId": testUserId,
@@ -64,8 +75,8 @@ function createTestServer(options) {
         res.json(data);
     });
 
-    app.post('/rest/1.0/users', function(req, res) {
-        var userUrl = req.protocol + '://' + req.get('host') + '/rest/1.0/users/' + testNewUserId;
+    app.post('/rest/2.0/users', function(req, res) {
+        var userUrl = req.protocol + '://' + req.get('host') + '/rest/2.0/users/' + testNewUserId;
 
         var requiredKeys = [
             "tenantId",
@@ -97,7 +108,7 @@ function createTestServer(options) {
 
     });
 
-    app.get('/rest/1.0/users/:user_id/quota', function(req, res) {
+    app.get('/rest/2.0/users/:user_id/quota', function(req, res) {
         var quota = {
             "quota": 1,
             "globalQuotaExceeded": false
@@ -106,8 +117,8 @@ function createTestServer(options) {
         res.json(quota);
     });
 
-    app.post('/rest/1.0/users/:user_id/mailings', function(req, res) {
-        var mailingUrl = req.protocol + '://' + req.get('host') + '/rest/1.0/users/' + req.params.user_id + '/mailings/' + testMailingId;
+    app.post('/rest/2.0/users/:user_id/mailings', function(req, res) {
+        var mailingUrl = req.protocol + '://' + req.get('host') + '/rest/2.0/users/' + req.params.user_id + '/mailings/' + testMailingId;
 
         // {"name":"Mobile App mailing 2015-04-22 20:03", "productId":2, "source":"MOBILE", "addressFormat":"PERSON_FIRST"}
         if (!req.body || !req.body.name || !req.body.productId || !req.body.source || !req.body.addressFormat) {
@@ -123,8 +134,8 @@ function createTestServer(options) {
             .end();
     });
 
-    app.post('/rest/1.0/users/:user_id/assets', function(req, res) {
-        var assetUrl = req.protocol + '://' + req.get('host') + '/rest/1.0/assets/user/' + testAssetId;
+    app.post('/rest/2.0/users/:user_id/assets', function(req, res) {
+        var assetUrl = req.protocol + '://' + req.get('host') + '/rest/2.0/assets/user/' + testAssetId;
 
         var form = new multiparty.Form();
         var hasAssetField = false;
@@ -164,7 +175,7 @@ function createTestServer(options) {
         form.parse(req);
     });
 
-    app.put('/rest/1.0/users/:user_id/mailings/:mailing_id/recipients', function(req, res) {
+    app.put('/rest/2.0/users/:user_id/mailings/:mailing_id/recipients', function(req, res) {
 
         var body = req.body;
 
@@ -196,12 +207,12 @@ function createTestServer(options) {
         res.status(204).end();
     }
 
-    app.put('/rest/1.0/users/:user_id/mailings/:mailing_id/pages/1', handleSVGPage);
-    app.put('/rest/1.0/users/:user_id/mailings/:mailing_id/pages/2', handleSVGPage);
+    app.put('/rest/2.0/users/:user_id/mailings/:mailing_id/pages/1', handleSVGPage);
+    app.put('/rest/2.0/users/:user_id/mailings/:mailing_id/pages/2', handleSVGPage);
 
 
-    app.post('/rest/1.0/users/:user_id/mailings/:mailing_id/order', function (req, res) {
-        var testOrderUrl = req.protocol + '://' + req.get('host') + '/rest/1.0/users' + req.params.user_id + '/orders/' + testOrderId;
+    app.post('/rest/2.0/users/:user_id/mailings/:mailing_id/order', function (req, res) {
+        var testOrderUrl = req.protocol + '://' + req.get('host') + '/rest/2.0/users' + req.params.user_id + '/orders/' + testOrderId;
         var body = req.body;
         /*
         {
@@ -218,36 +229,6 @@ function createTestServer(options) {
 
         res.status(201).location(testOrderUrl).end();
     });
-
-    // app.get('/test', function(req, res) {
-    //     var request = require('request');
-    //     var auth = 'bob@example.org:ilovealice@'
-    //     var url = 'http://' + auth + req.get('host') + '/rest/1.0/users/123/mailings/456/page/1';
-    //     var svgPagePath = path.join(__dirname, 'fixtures', 'page1.svg');
-    //     console.log(svgPagePath);
-    //     console.log(url);
-    //     fs.createReadStream(svgPagePath)
-
-    //     .pipe(
-    //         request
-    //         .put(url)
-    //         .on('response', function(r) { console.log(r.statusCode); res.end('Request sent. to '+url+'resp. status:'+r.statusCode); })
-    //     );
-
-    // });
-
-    // app.get('/test-upload', function(req, res) {
-    //   // show a file upload form
-    //   res.writeHead(200, {'content-type': 'text/html'});
-    //   res.end(
-    //     '<form action="/rest/1.0/users/123/assets" enctype="multipart/form-data" method="post">'+
-    //     '<input type="text" name="title"><br>'+
-    //     '<input type="file" name="asset"><br>'+
-    //     '<input type="submit" value="Upload">'+
-    //     '</form>'
-    //   );
-    // });
-
 
     // Start server
     var server = http.createServer(app).listen(port);
