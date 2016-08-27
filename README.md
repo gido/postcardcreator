@@ -6,34 +6,43 @@ A node.js API for the [Swiss Post Postcard Creator](http://postcardcreator.post.
 ```javascript
 var path = require('path'),
     Postcardcreator = require('postcardcreator'),
+    SSOHelper = require('postcardcreator/helper/SSOPostHelper')(),
     Postcard = Postcardcreator.Postcard;
 
-var client = new Postcardcreator(postcard_user, postcard_pass);
+SSOHelper.getPostcardcreatorToken(postcard_user, postcard_pass, function(err, token) {
 
-var message = "Hello, here is a picture of me. Best!";
-var assetStream = fs.createReadStream(path.join(__dirname, 'me_under_the_sun.jpg'));
-// here is my real address you can use it to send me picture of your works ;-)
-var recipient = {
-    salutation: "Monsieur",
-    givenName: "Gilles",
-    familyName: "Doge",
-    company: "Antistatique.net",
-    street: "Rue de Sébeillon 9b",
-    postCode: "1004",
-    place: "Lausanne"
-};
-
-var postcard = new Postcard(assetStream, message, recipient);
-
-client.sendPostcard(postcard, function(err, result) {
     if (err) {
-        console.log("Error when sending the postcard. ", err);
-        handleError(err);
+        console.error(err);
         return;
     }
 
-    console.log("Postcard sent with success !");
-    console.log(result);
+    var client = new Postcardcreator(token);
+
+    var message = "Hello, here is a picture of me. Best!";
+    var assetStream = fs.createReadStream(path.join(__dirname, 'me_under_the_sun.jpg'));
+    // here is my real address you can use it to send me picture of your works ;-)
+    var recipient = {
+        salutation: "Monsieur",
+        givenName: "Gilles",
+        familyName: "Doge",
+        company: "Antistatique.net",
+        street: "Rue de Sébeillon 9b",
+        postCode: "1004",
+        place: "Lausanne"
+    };
+
+    var postcard = new Postcard(assetStream, message, recipient);
+
+    client.sendPostcard(postcard, function(err, result) {
+        if (err) {
+            console.log("Error when sending the postcard. ", err);
+            handleError(err);
+            return;
+        }
+
+        console.log("Postcard sent with success !");
+        console.log(result);
+    });
 });
 ```
 
