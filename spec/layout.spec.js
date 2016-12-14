@@ -9,7 +9,7 @@ describe('Postcard Creator Template Renderer', function() {
         var data = {
             'recipient': 'somebody',
             'sender'   : 'anybody',
-            'message'  : 'foo\nbar\nanother line'
+            'message'  : 'foo\nbar\nanother line\n\ndouble'
         }
         expect(layout.getBackPage(data)).toBe(expected_result);
     });
@@ -18,7 +18,7 @@ describe('Postcard Creator Template Renderer', function() {
         var data = {
             'recipient': 'somebody',
             'sender'   : 'anybody',
-            'message'  : 'foo\r\nbar\r\nanother line'
+            'message'  : 'foo\r\nbar\r\nanother line\r\n\r\ndouble'
         }
         expect(layout.getBackPage(data)).toBe(expected_result);
     });
