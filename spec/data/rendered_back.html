@@ -37,10 +37,10 @@
       <use xlink:href="#card"/>
     </clipPath>
 
-    <text id="senderField-company"><%= sender.company %></text>
-    <text id="senderField-name"><%= sender.givenName %> <%= sender.familyName %></text>
-    <text id="senderField-address"><%= sender.address %></text>
-    <text id="senderField-zipAndPlace"><%= sender.postCode %> <%= sender.place %></text>
+    <text id="senderField-company"></text>
+    <text id="senderField-name"> </text>
+    <text id="senderField-address"></text>
+    <text id="senderField-zipAndPlace"> </text>
     <text id="senderField-country"></text>
   </defs>
 
@@ -81,11 +81,27 @@
       <body>
         <p>
           <span style="color:#000000;font-family:'Arial';font-size:10pt;font-style:normal;font-weight:normal;text-align:start;text-decoration:none;">
-            <% _.each(message, function(row) { %>
+            
             <p>
-              <% if (row == "") { %><span style="font-family:'Arial';font-size:10pt;" /><% } else { %><span style="font-family:'Arial';font-size:10pt;"><%= row %></span><% } %>
+              <span style="font-family:'Arial';font-size:10pt;">foo</span>
             </p>
-            <% }) %>
+            
+            <p>
+              <span style="font-family:'Arial';font-size:10pt;">bar</span>
+            </p>
+            
+            <p>
+              <span style="font-family:'Arial';font-size:10pt;">another line</span>
+            </p>
+            
+            <p>
+              <span style="font-family:'Arial';font-size:10pt;" />
+            </p>
+            
+            <p>
+              <span style="font-family:'Arial';font-size:10pt;">double</span>
+            </p>
+            
           </span>
         </p>
       </body>
@@ -153,10 +169,10 @@
     <!-- 10pt * 1.2 => mm => 4.2234mm -->
 
     <text id="recipient" class="pp" transform="matrix(1 0 0 1 73 52)">
-      <tspan x="0" dy="3.5278"><%= recipient.givenName %> <%= recipient.familyName %></tspan>
-      <tspan x="0" dy="4.2234"><%= recipient.company %></tspan>
-      <tspan x="0" dy="4.2234"><%= recipient.street %></tspan>
-      <tspan x="0" dy="4.2234"><%= recipient.postCode %> <%= recipient.place %></tspan>
+      <tspan x="0" dy="3.5278"> </tspan>
+      <tspan x="0" dy="4.2234"></tspan>
+      <tspan x="0" dy="4.2234"></tspan>
+      <tspan x="0" dy="4.2234"> </tspan>
     </text>
     <g id="recipient-lines" class="no-pp webstamp" transform="matrix(1 0 0 1 73 52)" visibility="hidden" style="stroke:black; stroke-width:0.1; stroke-dasharray:0.4">
       <line x1="0" y1="9" x2="60" y2="9"/>
