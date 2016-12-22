@@ -81,11 +81,11 @@
       <body>
         <p>
           <span style="color:#000000;font-family:'Arial';font-size:10pt;font-style:normal;font-weight:normal;text-align:start;text-decoration:none;">
+            <% _.each(message, function(row) { %>
             <p>
-                <span style="font-family:'Arial';font-size:10pt;">
-                  <%= message %>
-                </span>
+              <% if (row == "") { %><span style="font-family:'Arial';font-size:10pt;" /><% } else { %><span style="font-family:'Arial';font-size:10pt;"><%= row %></span><% } %>
             </p>
+            <% }) %>
           </span>
         </p>
       </body>
