@@ -9,14 +9,14 @@ var path = require('path'),
     SSOHelper = require('postcardcreator/helper/SSOPostHelper')(),
     Postcard = Postcardcreator.Postcard;
 
-SSOHelper.getPostcardcreatorToken(postcard_user, postcard_pass, function(err, token) {
+SSOHelper.getPostcardcreatorToken(postcard_user, postcard_pass, function(err, data) {
 
     if (err) {
         console.error(err);
         return;
     }
 
-    var client = new Postcardcreator(token);
+    var client = new Postcardcreator(data.token);
 
     var message = "Hello, here is a picture of me. Best!";
     var assetStream = fs.createReadStream(path.join(__dirname, 'me_under_the_sun.jpg'));
@@ -49,3 +49,6 @@ SSOHelper.getPostcardcreatorToken(postcard_user, postcard_pass, function(err, to
 
 # License
 MIT
+
+# Related projects
+ - [abertschi/postcard_creator_wrapper](https://github.com/abertschi/postcard_creator_wrapper) - Python wrapper around the Rest API of the Swiss Postcard Creator
