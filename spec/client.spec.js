@@ -7,7 +7,7 @@ describe('Client', function() {
             'host': 'google.com'
         });
 
-        expect(client.getBaseUrl()).toBe('https://google.com/rest/2.0');
+        expect(client.getBaseUrl()).toBe('https://google.com/rest/2.2');
     });
 
     it('should build the correct baseUrl without SSL', function() {
@@ -16,6 +16,6 @@ describe('Client', function() {
             'useSSL': false,
         });
 
-        expect(client.getBaseUrl()).toBe('http://google.com/rest/2.0');
+        expect(client.getBaseUrl()).toBe('http://google.com/rest/2.2');
     });
 });

@@ -48,7 +48,7 @@ function createTestServer(options) {
     app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
     app.use(bodyParser.raw({ type: 'image/svg+xml' }));
 
-    app.get('/rest/2.0/users/current', function(req, res) {
+    app.get('/rest/2.2/users/current', function(req, res) {
         var data = {
             "tenantId": "CHE",
             "userId": testUserId,
@@ -75,8 +75,8 @@ function createTestServer(options) {
         res.json(data);
     });
 
-    app.post('/rest/2.0/users', function(req, res) {
-        var userUrl = req.protocol + '://' + req.get('host') + '/rest/2.0/users/' + testNewUserId;
+    app.post('/rest/2.2/users', function(req, res) {
+        var userUrl = req.protocol + '://' + req.get('host') + '/rest/2.2/users/' + testNewUserId;
 
         var requiredKeys = [
             "tenantId",
@@ -108,7 +108,7 @@ function createTestServer(options) {
 
     });
 
-    app.get('/rest/2.0/users/:user_id/quota', function(req, res) {
+    app.get('/rest/2.2/users/:user_id/quota', function(req, res) {
         var quota = {
             "quota": 1,
             "globalQuotaExceeded": false
@@ -117,8 +117,8 @@ function createTestServer(options) {
         res.json(quota);
     });
 
-    app.post('/rest/2.0/users/:user_id/mailings', function(req, res) {
-        var mailingUrl = req.protocol + '://' + req.get('host') + '/rest/2.0/users/' + req.params.user_id + '/mailings/' + testMailingId;
+    app.post('/rest/2.2/users/:user_id/mailings', function(req, res) {
+        var mailingUrl = req.protocol + '://' + req.get('host') + '/rest/2.2/users/' + req.params.user_id + '/mailings/' + testMailingId;
 
         // {"name":"Mobile App mailing 2015-04-22 20:03", "productId":2, "source":"MOBILE", "addressFormat":"PERSON_FIRST"}
         if (!req.body || !req.body.name || !req.body.productId || !req.body.source || !req.body.addressFormat) {
@@ -134,8 +134,8 @@ function createTestServer(options) {
             .end();
     });
 
-    app.post('/rest/2.0/users/:user_id/assets', function(req, res) {
-        var assetUrl = req.protocol + '://' + req.get('host') + '/rest/2.0/assets/user/' + testAssetId;
+    app.post('/rest/2.2/users/:user_id/assets', function(req, res) {
+        var assetUrl = req.protocol + '://' + req.get('host') + '/rest/2.2/assets/user/' + testAssetId;
 
         var form = new multiparty.Form();
         var hasAssetField = false;
@@ -175,7 +175,7 @@ function createTestServer(options) {
         form.parse(req);
     });
 
-    app.put('/rest/2.0/users/:user_id/mailings/:mailing_id/recipients', function(req, res) {
+    app.put('/rest/2.2/users/:user_id/mailings/:mailing_id/recipients', function(req, res) {
 
         var body = req.body;
 
@@ -207,12 +207,12 @@ function createTestServer(options) {
         res.status(204).end();
     }
 
-    app.put('/rest/2.0/users/:user_id/mailings/:mailing_id/pages/1', handleSVGPage);
-    app.put('/rest/2.0/users/:user_id/mailings/:mailing_id/pages/2', handleSVGPage);
+    app.put('/rest/2.2/users/:user_id/mailings/:mailing_id/pages/1', handleSVGPage);
+    app.put('/rest/2.2/users/:user_id/mailings/:mailing_id/pages/2', handleSVGPage);
 
 
-    app.post('/rest/2.0/users/:user_id/mailings/:mailing_id/order', function (req, res) {
-        var testOrderUrl = req.protocol + '://' + req.get('host') + '/rest/2.0/users' + req.params.user_id + '/orders/' + testOrderId;
+    app.post('/rest/2.2/users/:user_id/mailings/:mailing_id/order', function (req, res) {
+        var testOrderUrl = req.protocol + '://' + req.get('host') + '/rest/2.2/users' + req.params.user_id + '/orders/' + testOrderId;
         var body = req.body;
         /*
         {
