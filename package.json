@@ -1,6 +1,6 @@
 {
   "name": "postcardcreator",
-  "version": "2.0.1",
+  "version": "2.2.0",
   "description": "Swiss Postcard Creator API",
   "main": "index.js",
   "scripts": {

@@ -1,7 +1,7 @@
 CHANGELOG
 ---------
 
-## NEXT RELEASE
+## 2.2.0
     - Add support to 2.2 PostcardCreator REST endpoint (2.0 is Gone).
     - Better new lines handling
 
