@@ -28,7 +28,7 @@ describe('Postcard Creator API Auth', function () {
 
     app.use(auth);
 
-    app.get('/rest/2.0/users/current', function(req, res) {
+    app.get('/rest/2.2/users/current', function(req, res) {
         res.send('{ "email": "testvalue" }');
     });
 
